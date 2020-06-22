@@ -93,7 +93,8 @@ void loop() {
     //Print response
     line = client.readStringUntil('\n');  //Read Line by Line
     if(line[0] == '{'){
-      char JSONMessage[] = "{\"ticker\": \"btc\", \"value\": 10}";
+      char JSONMessage[line.length() + 1] ;
+      line.toCharArray(JSONMessage,line.length() + 1 );
       
       StaticJsonBuffer<300> JSONBuffer;
       JsonObject& parsed = JSONBuffer.parseObject(JSONMessage);
@@ -104,11 +105,16 @@ void loop() {
         break;
       }
 
-      const char* last = parsed["ticker"];
-      int val = parsed["value"];
-      
+      const char* last = parsed["ticker"]["last"];
+      const char* buy = parsed["ticker"]["buy"];
+      const char* sell = parsed["ticker"]["sell"];
+
+      Serial.print("LAST : ");
       Serial.println(last);
-      Serial.println(val);
+      Serial.print("BUY : ");
+      Serial.println(buy);
+      Serial.print("SELL : ");
+      Serial.println(sell);
     }
 //      Serial.println(line); //Print response
   }
